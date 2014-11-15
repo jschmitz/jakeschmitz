@@ -17,8 +17,6 @@ var gulp = require('gulp'),
     es = require('event-stream'),
     gzip = require('gulp-gzip');
 
-var distDir = 'dist/';
-
 // HTML
 gulp.task('html', function() {
   return gulp.src('src/*.html')
@@ -40,25 +38,17 @@ gulp.task('styles', function() {
 
 });
 
-//Bootsrtap
-gulp.task('bootstrap', function() {
-  return gulp.src('src/bootstrap/css/*.min*')
-    .pipe(concat('all.min.css'))
-    .pipe(gulp.dest(distDir + 'bootstrap/css/'))
-    .pipe(notify({ message: 'Bootstrap task complete' }));
-});
-
 // Images
 gulp.task('images', function() {
   return gulp.src('src/images/**/*')
     .pipe(cache(imagemin({ optimizationLevel: 3, progressive: true, interlaced: true })))
-    .pipe(gulp.dest(distDir + 'images'))
+    .pipe(gulp.dest('dist/images'))
     .pipe(notify({ message: 'Images task complete' }));
 });
 
 // Clean
 gulp.task('clean', function(cb) {
-    del([distDir + 'bootstrap/css',  distDir + '*', distDir + 'styles', distDir + 'images'], cb)
+    del(['dist/*', 'dist/**' ], cb)
 });
 
 // Default task
