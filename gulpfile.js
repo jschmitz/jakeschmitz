@@ -16,26 +16,28 @@ var gulp = require('gulp'),
     del = require('del'),
     es = require('event-stream'),
     gzip = require('gulp-gzip');
+    usemin = require('gulp-usemin');
+
+// Default task
+gulp.task('default', ['clean'], function() {
+    gulp.start('usemin', 'html', 'styles', 'images');
+});
 
 // HTML
 gulp.task('html', function() {
   return gulp.src('src/*.html')
     .pipe(minifyhtml())
-//    .pipe(gzip())
+    //.pipe(gzip())
     .pipe(gulp.dest('dist/'))
-    .pipe(notify({ message: 'html task complete' }));
 });
 
 // Styles
 gulp.task('styles', function() {
-
   return gulp.src(['src/bootstrap/css/*.min*','src/styles/*'])
     .pipe(minifycss())
     .pipe(concat('all.min.css'))
     .pipe(gulp.dest('dist/styles'))
     .pipe(gzip())
-    .pipe(notify({ message: 'Styles task complete' }));
-
 });
 
 // Images
@@ -43,7 +45,6 @@ gulp.task('images', function() {
   return gulp.src('src/images/**/*')
     .pipe(cache(imagemin({ optimizationLevel: 3, progressive: true, interlaced: true })))
     .pipe(gulp.dest('dist/images'))
-    .pipe(notify({ message: 'Images task complete' }));
 });
 
 // Clean
@@ -51,8 +52,11 @@ gulp.task('clean', function(cb) {
     del(['dist/*', 'dist/**' ], cb)
 });
 
-// Default task
-gulp.task('default', ['clean'], function() {
-    gulp.start('html', 'styles', 'images');
+// Change css/script to minified references in *.html files
+gulp.task('usemin', function() {
+  gulp.src('src/*.html')
+    .pipe(usemin({
+      css: []
+    }))
+    .pipe(gulp.dest('dist/'));
 });
-
