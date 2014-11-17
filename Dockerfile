@@ -1,5 +1,6 @@
 FROM ubuntu:14.04
 
+RUN apt-get update -qy && apt-get upgrade -qy
 RUN apt-get update -q
 
 # Install ngxinx
